@@ -59,13 +59,17 @@ const Graph = (g) => {
     .getIn(['edges', key, 'props', prop])
 
   const _mergeEdge = (g, key, props, label, start, end) => {
-    const g1 = g.hasIn(['edges', key])
+
+    const edgeExists = g.hasIn(['edges', key])
+    const g1 = edgeExists
       ? g.mergeIn(['edges', key, 'props'], props)
       : g.setIn(['edges', key], Edge(key, label, start, end, props))
 
-    const g2 = g1
-      .setIn(['nodes', start, 'out', key], label)
-      .setIn(['nodes', end, 'in', key], label)
+    const g2 = edgeExists
+      ? g1
+      : g1
+        .setIn(['nodes', start, 'out', key], label)
+        .setIn(['nodes', end, 'in', key], label)
 
     return g2
   }
@@ -136,7 +140,7 @@ const Graph = (g) => {
       .deleteIn(['legacyIndex', 'nodes', li])
       .deleteIn(['legacyIndex', 'nodes', nodeKey])
 
-    return _deleteNode(g1, nodeKey)
+    return Graph(_deleteNode(g1, nodeKey))
   }
 
   // deleteEdgeLegacyIndex
@@ -148,7 +152,7 @@ const Graph = (g) => {
       .deleteIn(['legacyIndex', 'edges', li])
       .deleteIn(['legacyIndex', 'edges', edgeKey])
 
-    return _deleteEdge(g1, edgeKey)
+    return Graph(_deleteEdge(g1, edgeKey))
   }
 
   // inEKeys

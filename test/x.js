@@ -1,6 +1,0 @@
-const graphjs = require('./lib/graphjs.bundle.js')
-let g = graphjs.Graph()
-g = g.mergeNode('person.selim', {name: 'selim'})
-g =g.mergeNode('person.aditya', {name: 'adi'})
-g =g.mergeEdge('selim_friend_aditya', {}, 'is_friend', 'person.selim', 'person.aditya')
-g = g.addNodeLegacyIndex(10, 'person.selim')
