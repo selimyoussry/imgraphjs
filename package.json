@@ -1,5 +1,5 @@
 {
-  "name": "graphjs",
+  "name": "imgraphjs",
   "version": "0.0.1",
   "description": "Directed property-graph",
   "main": "lib/graphjs.bundle.js",
