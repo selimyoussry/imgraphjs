@@ -1,0 +1,36 @@
+{
+  "name": "graphjs",
+  "version": "0.0.1",
+  "description": "Directed property-graph",
+  "main": "lib/graphjs.bundle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/webpack/bin/webpack.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hippoai/graphjs.git"
+  },
+  "keywords": [
+    "graph"
+  ],
+  "author": "Selim Youssry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hippoai/graphjs/issues"
+  },
+  "homepage": "https://github.com/hippoai/graphjs#readme",
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1"
+  }
+}
