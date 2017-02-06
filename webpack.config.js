@@ -1,11 +1,11 @@
 const webpack = require('webpack');
 
-const libraryName = 'graphjs';
+const libraryName = 'imgraphjs';
 
 module.exports = {
-  entry: './src/index.js',
+  entry: __dirname + '/src/index.js',
   output: {
-    path: './lib',
+    path: __dirname + '/lib',
     filename: libraryName + '.bundle.js',
     libraryTarget: 'umd',
     library: libraryName,
