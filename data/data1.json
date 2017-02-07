@@ -116,25 +116,27 @@
         "props": {}
       }
     },
-    "legacyNodes": {
-      "1": "company.OnePlus",
-      "2": "person.patrick",
-      "3": "person.tim",
-      "4": "person.clara",
-      "5": "person.jimbo",
-      "6": "person.john",
-      "7": "person.elliott"
-    },
-    "legacyEdges": {
-      "1": "patrick.worksin.OnePlus",
-      "2": "john.worksin.OnePlus",
-      "3": "tim.worksin.OnePlus",
-      "4": "clara.worksin.OnePlus",
-      "5": "jimbo.worksin.OnePlus",
-      "6": "john.is_father_of.patrick",
-      "7": "tim.is_father_of.clara",
-      "8": "tim.is_father_of.jimbo",
-      "9": "elliott.is_father_of.john"
+    "legacyIndex": {
+      "nodes": {
+        "1": "company.OnePlus",
+        "2": "person.patrick",
+        "3": "person.tim",
+        "4": "person.clara",
+        "5": "person.jimbo",
+        "6": "person.john",
+        "7": "person.elliott"
+      },
+      "edges": {
+        "1": "patrick.worksin.OnePlus",
+        "2": "john.worksin.OnePlus",
+        "3": "tim.worksin.OnePlus",
+        "4": "clara.worksin.OnePlus",
+        "5": "jimbo.worksin.OnePlus",
+        "6": "john.is_father_of.patrick",
+        "7": "tim.is_father_of.clara",
+        "8": "tim.is_father_of.jimbo",
+        "9": "elliott.is_father_of.john"
+      }
     }
   },
   "$delete": {

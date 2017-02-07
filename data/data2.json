@@ -20,11 +20,13 @@
         }
       }
     },
-    "legacyNodes": {
-      "abc": "person.luisa"
-    },
-    "legacyEdges": {
-      "e.abc": "luisa.worksin.OnePlus"
+    "legacyIndex": {
+      "nodes": {
+        "abc": "person.luisa"
+      },
+      "edges": {
+        "e.abc": "luisa.worksin.OnePlus"
+      }
     }
   },
   "$delete": {

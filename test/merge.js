@@ -3,13 +3,13 @@ import fs from 'fs'
 import { Graph } from '../src'
 
 const newGraph = JSON.parse(
-  fs.readFileSync('./test/data1.json')
+  fs.readFileSync('./data/data1.json')
 )
 
 const g = Graph().merge(newGraph)
 
 const delGraph = JSON.parse(
-  fs.readFileSync('./test/data2.json')
+  fs.readFileSync('./data/data2.json')
 )
 
 describe('Merge', () => {

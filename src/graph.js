@@ -264,7 +264,9 @@ const Graph = (g) => {
   function merge({
     '$merge': {
       nodes, edges,
-      legacyNodes, legacyEdges
+      legacyIndex: {
+        nodes: legacyNodes, edges: legacyEdges        
+      }
     },
     '$delete': {
       nodes: delNodes, edges: delEdges,
