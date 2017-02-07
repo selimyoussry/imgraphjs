@@ -93,9 +93,25 @@ const Graph = (g) => {
     return Graph(_deleteNode(_graph, key))
   }
 
-  const _deleteEdge = (g, key) => g
-    .deleteIn(['edges', key])
+  const _deleteEdge = (g, edgeKey) => {
+    const edge = g.getIn(['edges', edgeKey])
+    const startNodeKey = edge.get('start')
+    const endNodeKey = edge.get('end')
 
+    const startNodeOut = g
+      .getIn(['nodes', startNodeKey, 'out'])
+      .filter((_edgeLabel, _edgeKey) => _edgeKey !== edgeKey)
+
+    const endNodeIn = g
+      .getIn(['nodes', endNodeKey, 'in'])
+      .filter((_edgeLabel, _edgeKey) => _edgeKey !== edgeKey)
+
+    return g
+      .deleteIn(['edges', edgeKey])
+      .setIn(['nodes', startNodeKey, 'in'], startNodeOut)
+      .setIn(['nodes', endNodeKey, 'in'], endNodeIn)
+
+  }
   // deleteEdge
   function deleteEdge(key){
     return Graph(_deleteEdge(_graph, key))
@@ -265,7 +281,7 @@ const Graph = (g) => {
     '$merge': {
       nodes, edges,
       legacyIndex: {
-        nodes: legacyNodes, edges: legacyEdges        
+        nodes: legacyNodes, edges: legacyEdges
       }
     },
     '$delete': {
