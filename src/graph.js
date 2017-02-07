@@ -262,12 +262,13 @@ const Graph = (g) => {
 
   // merge
   function merge({
-    '$merge': {nodes, edges},
+    '$merge': {
+      nodes, edges,
+      legacyNodes, legacyEdges
+    },
     '$delete': {
-      nodes: delNodes,
-      edges: delEdges,
-      legacyNodes: delLegacyNodes,
-      legacyEdges: delLegacyEdges
+      nodes: delNodes, edges: delEdges,
+      legacyNodes: delLegacyNodes, legacyEdges: delLegacyEdges
     }
   }){
 
@@ -318,7 +319,25 @@ const Graph = (g) => {
       g1
     )
 
-    return Graph(g2)
+    // Add the legacy nodes
+    const g3 = Object.keys(legacyNodes).reduce(
+      (acc, legacyNodeIndex) => {
+        const nodeKey = legacyNodes[legacyNodeIndex]
+        return _addNodeLegacyIndex(acc, legacyNodeIndex, nodeKey)
+      },
+      g2
+    )
+
+    // Add the legacy edges
+    const g4 = Object.keys(legacyEdges).reduce(
+      (acc, legacyEdgeIndex) => {
+        const edgeKey = legacyEdges[legacyEdgeIndex]
+        return _addEdgeLegacyIndex(acc, legacyEdgeIndex, edgeKey)
+      },
+      g3
+    )
+
+    return Graph(g4)
   }
 
   function toJS(){
