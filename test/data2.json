@@ -1,0 +1,36 @@
+{
+  "$merge": {
+    "nodes": {
+      "person.luisa": {
+        "key": "person.luisa",
+        "props": {
+          "name": "luisa",
+          "age": 40
+        }
+      }
+    },
+    "edges": {
+      "luisa.worksin.OnePlus": {
+        "key": "luisa.worksin.OnePlus",
+        "label": "WORKS_IN",
+        "start": "person.luisa",
+        "end": "company.OnePlus",
+        "props": {
+          "since": 2015
+        }
+      }
+    },
+    "legacyNodes": {
+      "abc": "person.luisa"
+    },
+    "legacyEdges": {
+      "e.abc": "luisa.worksin.OnePlus"
+    }
+  },
+  "$delete": {
+    "nodes": ["person.patrick"],
+    "edges": ["patrick.worksin.OnePlus"],
+    "legacyNodes": ["3"],
+    "legacyEdges": ["8"]
+  }
+}
