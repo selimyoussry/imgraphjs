@@ -39,6 +39,9 @@ const Graph = (g) => {
   // getNodeProp
   const getNodeProp = (key, prop) => _graph.getIn(['nodes', key, 'props', prop])
 
+  // getNodeProps returns the properties
+  const getNodeProps = (key) => _graph.getIn(['nodes', key, 'props'])
+
   const _mergeNode = (g, key, props) => g.hasIn(['nodes', key])
       ? g.mergeIn(['nodes', key, 'props'], props)
       : g.setIn(['nodes', key], Node(key, props))
@@ -57,6 +60,9 @@ const Graph = (g) => {
   // getEdgeProp
   const getEdgeProp = (key, prop) => _graph
     .getIn(['edges', key, 'props', prop])
+
+  // getEdgeProps returns the edge props
+  const getEdgeProps = (key) => _graph.getIn(['edges', key, 'props'])
 
   const _mergeEdge = (g, key, props, label, start, end) => {
 
@@ -87,9 +93,25 @@ const Graph = (g) => {
     return Graph(_deleteNode(_graph, key))
   }
 
-  const _deleteEdge = (g, key) => g
-    .deleteIn(['edges', key])
+  const _deleteEdge = (g, edgeKey) => {
+    const edge = g.getIn(['edges', edgeKey])
+    const startNodeKey = edge.get('start')
+    const endNodeKey = edge.get('end')
 
+    const startNodeOut = g
+      .getIn(['nodes', startNodeKey, 'out'])
+      .filter((_edgeLabel, _edgeKey) => _edgeKey !== edgeKey)
+
+    const endNodeIn = g
+      .getIn(['nodes', endNodeKey, 'in'])
+      .filter((_edgeLabel, _edgeKey) => _edgeKey !== edgeKey)
+
+    return g
+      .deleteIn(['edges', edgeKey])
+      .setIn(['nodes', startNodeKey, 'in'], startNodeOut)
+      .setIn(['nodes', endNodeKey, 'in'], endNodeIn)
+
+  }
   // deleteEdge
   function deleteEdge(key){
     return Graph(_deleteEdge(_graph, key))
@@ -119,40 +141,60 @@ const Graph = (g) => {
     return Graph(_addEdgeLegacyIndex(_graph, legacyIndex, index))
   }
 
+  const _findNodeLegacyIndex = (g, legacyIndex) => {
+    const li = `legacy.${legacyIndex}`
+    return g.getIn(['legacyIndex', 'nodes', li])
+  }
+
   // findNodeLegacyIndex
   function findNodeLegacyIndex(legacyIndex){
+    return _findNodeLegacyIndex(_graph, legacyIndex)
+  }
+
+  const _findEdgeLegacyIndex = (g, legacyIndex) => {
     const li = `legacy.${legacyIndex}`
-    return _graph.getIn(['legacyIndex', 'nodes', li])
+    return g.getIn(['legacyIndex', 'edges', li])
   }
 
   // findEdgeLegacyIndex
   function findEdgeLegacyIndex(legacyIndex){
+    return _findEdgeLegacyIndex(_graph, legacyIndex)
+  }
+
+  const _deleteNodeLegacyIndex = (g, legacyIndex) => {
+    const nodeKey = _findNodeLegacyIndex(g, legacyIndex)
     const li = `legacy.${legacyIndex}`
-    return _graph.getIn(['legacyIndex', 'edges', li])
+
+    const g1 = g
+      .deleteIn(['legacyIndex', 'nodes', li])
+      .deleteIn(['legacyIndex', 'nodes', nodeKey])
+
+    return _deleteNode(g1, nodeKey)
   }
 
   // deleteNodeLegacyIndex
   function deleteNodeLegacyIndex(legacyIndex){
-    const nodeKey = findNodeLegacyIndex(legacyIndex)
+    return Graph(
+      _deleteNodeLegacyIndex(_graph, legacyIndex)
+    )
+  }
+
+  const _deleteEdgeLegacyIndex = (g, legacyIndex) => {
+    const edgeKey = _findEdgeLegacyIndex(g, legacyIndex)
     const li = `legacy.${legacyIndex}`
 
-    const g1 = _graph
-      .deleteIn(['legacyIndex', 'nodes', li])
-      .deleteIn(['legacyIndex', 'nodes', nodeKey])
+    const g1 = g
+      .deleteIn(['legacyIndex', 'edges', li])
+      .deleteIn(['legacyIndex', 'edges', edgeKey])
 
-    return Graph(_deleteNode(g1, nodeKey))
+    return _deleteEdge(g1, edgeKey)
   }
 
   // deleteEdgeLegacyIndex
   function deleteEdgeLegacyIndex(legacyIndex){
-    const edgeKey = findEdgeLegacyIndex(legacyIndex)
-    const li = `legacy.${legacyIndex}`
-
-    const g1 = _graph
-      .deleteIn(['legacyIndex', 'edges', li])
-      .deleteIn(['legacyIndex', 'edges', edgeKey])
-
-    return Graph(_deleteEdge(g1, edgeKey))
+    return Graph(
+      _deleteEdgeLegacyIndex(_graph, legacyIndex)
+    )
   }
 
   // inEKeys
@@ -235,16 +277,53 @@ const Graph = (g) => {
   }
 
   // merge
-  function merge({nodes, edges}){
+  function merge({
+    '$merge': {
+      nodes, edges,
+      legacyIndex: {
+        nodes: legacyNodes, edges: legacyEdges
+      }
+    },
+    '$delete': {
+      nodes: delNodes, edges: delEdges,
+      legacyNodes: delLegacyNodes, legacyEdges: delLegacyEdges
+    }
+  }){
 
+    // Delete edges
+    const dg1 = delEdges.reduce(
+      (acc, edgeKey) => _deleteEdge(acc, edgeKey),
+      _graph
+    )
+
+    // Delete legacy edges
+    const dg2 = delLegacyEdges.reduce(
+      (acc, legacyEdgeKey) => _deleteEdgeLegacyIndex(acc, legacyEdgeKey),
+      dg1
+    )
+
+    // Delete nodes
+    const dg3 = delNodes.reduce(
+      (acc, nodeKey) => _deleteNode(acc, nodeKey),
+      dg2
+    )
+
+    // Delete legacy nodes
+    const dg4 = delLegacyNodes.reduce(
+      (acc, legacyNodeKey) => _deleteNodeLegacyIndex(acc, legacyNodeKey),
+      dg3
+    )
+
+    // Add the nodes
     const g1 = Object.keys(nodes).reduce(
       (acc, nodeKey) => {
         const node = nodes[nodeKey]
         return _mergeNode(acc, nodeKey, node['props'])
       },
-      _graph
+      dg4
     )
 
+    // Add the edges
     const g2 = Object.keys(edges).reduce(
       (acc, edgeKey) => {
         const edge = edges[edgeKey]
@@ -258,8 +337,25 @@ const Graph = (g) => {
       g1
     )
 
-    return Graph(g2)
+    // Add the legacy nodes
+    const g3 = Object.keys(legacyNodes).reduce(
+      (acc, legacyNodeIndex) => {
+        const nodeKey = legacyNodes[legacyNodeIndex]
+        return _addNodeLegacyIndex(acc, legacyNodeIndex, nodeKey)
+      },
+      g2
+    )
 
+    // Add the legacy edges
+    const g4 = Object.keys(legacyEdges).reduce(
+      (acc, legacyEdgeIndex) => {
+        const edgeKey = legacyEdges[legacyEdgeIndex]
+        return _addEdgeLegacyIndex(acc, legacyEdgeIndex, edgeKey)
+      },
+      g3
+    )
+
+    return Graph(g4)
   }
 
   function toJS(){
