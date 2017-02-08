@@ -364,7 +364,7 @@ const Graph = (g) => {
 
   // return
   const graph = () => {
-    return g
+    return _graph
   }
 
   return {
