@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register --colors -w ./test/*.js",
-    "build": "./node_modules/webpack/bin/webpack.js"
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
