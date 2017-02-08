@@ -363,7 +363,7 @@ const Graph = (g) => {
   }
 
   // return
-  const graph = () => {
+  function graph (){
     return _graph
   }
 
