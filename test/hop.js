@@ -27,7 +27,7 @@ describe('Hop', () => {
     })
 
     it('should find start node property', () => {
-      should(g.startN('a.b').getIn(['props', 'key'])).equal('node.1')
+      should(g.startN('a.b').get('key')).equal('node.1')
     })
 
   })
