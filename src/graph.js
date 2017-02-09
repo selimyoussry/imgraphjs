@@ -2,9 +2,9 @@ import { Map, fromJS } from 'immutable'
 
 const Node = (key, props) => Map({
   key,
-  props: fromJS(Object.assign(props, {
-    key
-  })), // key - value for all properties
+  props: props  // key - value for all properties
+    ? fromJS(Object.assign(props, { key }))
+    : fromJS({ key }),
   out: Map(), // key (edgeKey) - value (reference to the edge)
   in: Map() // key (edgeKey) - value (reference to the edge)
 })
