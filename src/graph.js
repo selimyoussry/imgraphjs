@@ -128,7 +128,7 @@ const Graph = (g) => {
 
     return g
       .deleteIn(['edges', edgeKey])
-      .setIn(['nodes', startNodeKey, 'in'], startNodeOut)
+      .setIn(['nodes', startNodeKey, 'out'], startNodeOut)
       .setIn(['nodes', endNodeKey, 'in'], endNodeIn)
 
   }
