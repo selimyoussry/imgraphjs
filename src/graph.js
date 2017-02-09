@@ -51,6 +51,16 @@ const Graph = (g) => {
     return Graph(_mergeNode(_graph, key, props))
   }
 
+  // mergeNodes accepts a function as argument
+  // this function should return a list of key, props to call mergeNode
+  function mergeNodes(args) {
+    const _underlyingGraph = args.reduce(
+      (acc, {key, props}) => _mergeNode(acc, key, props),
+      _graph
+    )
+    return Graph(_underlyingGraph)
+  }
+
   // hasEdge
   const hasEdge = (key) => _graph.hasIn(['edges', key])
 
@@ -83,6 +93,16 @@ const Graph = (g) => {
   // mergeEdge
   function mergeEdge(key, props, label, start, end){
     return Graph(_mergeEdge(_graph, key, props, label, start, end))
+  }
+
+  // mergeEdges
+  function mergeEdges(args){
+    const _underlyingGraph = args.reduce(
+      (acc, {key, props, label, start, end}) =>
+        _mergeEdge(acc, key, props, label, start, end),
+      _graph
+    )
+    return Graph(_underlyingGraph)
   }
 
   const _deleteNode = (g, key) => g
@@ -368,8 +388,8 @@ const Graph = (g) => {
   }
 
   return {
-    hasNode, getNode, getNodeProp, mergeNode,
-    hasEdge, getEdge, getEdgeProp, mergeEdge,
+    hasNode, getNode, getNodeProp, mergeNode, mergeNodes,
+    hasEdge, getEdge, getEdgeProp, mergeEdge, mergeEdges,
     merge,
     deleteNode, deleteEdge,
     addNodeLegacyIndex, addEdgeLegacyIndex,

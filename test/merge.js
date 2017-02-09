@@ -75,4 +75,42 @@ describe('Merge', () => {
 
   })
 
+  // Successive merges
+  describe('allow successive merges', () => {
+
+    const newNodes = ['n1', 'n2', 'n3', 'n4'].map((nodeKey) => {
+      return {
+        key: nodeKey,
+        props: {
+          name: nodeKey + nodeKey
+        }
+      }
+    })
+
+    const newEdges = [1, 2].map((edgeKeyNumber) => {
+      return {
+        key: `e${edgeKeyNumber}`,
+        props: {
+          name: `e${edgeKeyNumber + 1}`
+        },
+        label: 'TEST_ME',
+        start: `n${edgeKeyNumber}`,
+        end: `n${edgeKeyNumber + 1}`
+      }
+    })
+
+    const g2 = g
+      .mergeNodes(newNodes)
+      .mergeEdges(newEdges)
+
+    it('should find n3 name', () => {
+      should(g2.getNodeProp('n3', 'name')).equal('n3n3')
+    })
+
+    it('should find e2 name', () => {
+      should(g2.getEdgeProp('e2', 'name')).equal('e3')
+    })
+
+  })
+
 })
