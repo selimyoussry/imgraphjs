@@ -3,12 +3,10 @@ import { Graph } from '../src'
 
 let g = Graph()
 g = g.mergeNode('node.1', {
-  key: 'x.node.1',
   prop1: 120,
   prop2: 'hello'
 })
 g = g.mergeNode('node.2', {
-  key: 'x.node.2',
   prop1: 130,
   prop2: 'hallo'
 })

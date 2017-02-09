@@ -35,5 +35,17 @@ describe('Deleters', () => {
 
   })
 
+  // Delete edge
+  describe('delete an edge', () => {
+
+    it('should delete edge', () => {
+      console.log(
+        g2.getNode('node.1').get('out').toJS(),
+        g2.deleteEdge('a.b').getNode('node.1').get('out').toJS()
+      )
+    })
+
+  })
+
 
 })
