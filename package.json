@@ -1,6 +1,6 @@
 {
   "name": "imgraphjs",
-  "version": "0.0.352",
+  "version": "0.0.353",
   "description": "Directed property-graph",
   "main": "lib/imgraphjs.bundle.js",
   "directories": {

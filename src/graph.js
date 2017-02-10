@@ -113,6 +113,15 @@ const Graph = (g) => {
     return Graph(_deleteNode(_graph, key))
   }
 
+  // deleteNodes deletes multiple edges in one call
+  function deleteNodes(keys){
+    const _underlyingGraph = keys.reduce(
+      (acc, key) => _deleteNode(acc, key),
+      _graph
+    )
+    return Graph(_underlyingGraph)
+  }
+
   const _deleteEdge = (g, edgeKey) => {
     const edge = g.getIn(['edges', edgeKey])
     const startNodeKey = edge.get('start')
@@ -135,6 +144,15 @@ const Graph = (g) => {
   // deleteEdge
   function deleteEdge(key){
     return Graph(_deleteEdge(_graph, key))
+  }
+
+  // deleteEdges deletes multiple edges in one call
+  function deleteEdges(keys){
+    const _underlyingGraph = keys.reduce(
+      (acc, key) => _deleteEdge(acc, key),
+      _graph
+    )
+    return Graph(_underlyingGraph)
   }
 
   const _addNodeLegacyIndex = (g, legacyIndex, index) => {
