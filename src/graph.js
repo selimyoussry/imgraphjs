@@ -1,20 +1,26 @@
 import { Map, fromJS } from 'immutable'
 
+const makeProps = props => props
+  ? fromJS(props)
+  : Map()
+
 const Node = (key, props) => Map({
   key,
-  props: fromJS(props),
+  props: makeProps(props),
   out: Map(), // key (edgeKey) - value (reference to the edge)
   in: Map() // key (edgeKey) - value (reference to the edge)
 })
 
-const Edge = (key, label, start, end, props) => Map({
-  key,
-  label,
-  start,
-  end,
-  props: fromJS(props)
-})
+const Edge = (key, label, start, end, props) => {
+  return Map({
+    key,
+    label,
+    start,
+    end,
+    props: makeProps(props)
+  })
 
+}
 const newLegacyIndex = () => Map({
   nodes: Map(),
   edges: Map()
@@ -124,6 +130,9 @@ const Graph = (g) => {
 
   const _deleteEdge = (g, edgeKey) => {
     const edge = g.getIn(['edges', edgeKey])
+    if(!edge){
+      return g
+    }
     const startNodeKey = edge.get('start')
     const endNodeKey = edge.get('end')
 

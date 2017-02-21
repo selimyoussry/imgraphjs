@@ -18,6 +18,12 @@
         "props": {
           "since": 2015
         }
+      },
+      "luisa.likes.OnePlus": {
+        "key": "luisa.likes.OnePlus",
+        "label": "LIKES",
+        "start": "person.luisa",
+        "end": "company.OnePlus"
       }
     },
     "legacyIndex": {

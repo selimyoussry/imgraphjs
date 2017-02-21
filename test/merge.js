@@ -40,9 +40,10 @@ describe('Merge', () => {
   describe('delete nodes and edges', () => {
 
     const g2 = g.merge(delGraph)
+    const g3 = g2.merge(delGraph)
 
     it('should not have a node person.patrick anymore', () => {
-      should(g2.hasNode("person.patrick")).equal(false)
+      should(g3.hasNode("person.patrick")).equal(false)
     })
 
     it('should not have an edge patrick.worksin.OnePlus anymore', () => {
